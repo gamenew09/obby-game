@@ -2,3 +2,5 @@
 /out
 /include
 *.tsbuildinfo
+build.rbxlx
+build.rbxlx.lock
