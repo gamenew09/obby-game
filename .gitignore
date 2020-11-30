@@ -4,3 +4,5 @@
 *.tsbuildinfo
 *.rbxlx
 *.rbxlx.lock
+
+*.rbxl.lock
