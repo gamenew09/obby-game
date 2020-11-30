@@ -16,8 +16,6 @@ export class Leaderstats<T> {
         this.leaderstats = new Instance("ObjectValue");
         this.leaderstats.Name = "leaderstats";
         this.leaderstats.Parent = ply;
-
-        print(this.leaderstats);
     }
 
     public addStat(name: LeaderstatsKey<T>, statType: LeaderstatType, defaultValue?: string | number): Leaderstats<T> {
@@ -26,7 +24,6 @@ export class Leaderstats<T> {
             case "number":
                 obj = new Instance("NumberValue");
                 obj.Name = name;
-                print(typeIs(defaultValue, "number"));
                 if (typeIs(defaultValue, "number")) {
                     obj.Value = defaultValue;
                 }
