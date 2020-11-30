@@ -1,48 +1,66 @@
 import Cue from "@rbxts/cue";
 import { HttpService, Players, ServerStorage, Workspace } from "@rbxts/services";
 import t from "@rbxts/t";
+import { printOutInterface } from "shared/debugutil";
 import { InstanceAs } from "shared/ensureutil";
+import { copyInterface } from "shared/tableutil";
 
 export interface ObbyPartConfig {
-    [key: string]: unknown;
+    /**
+     * Indicates the difficulty of a obby part, which is used when generating an obby stage.
+     */
     Difficulty: number;
+    /**
+     * Indicates that the obby piece is the beginning platform that a player is on.
+     */
     Beginning: boolean;
-    CountAsNewStage: boolean;
+    /**
+     * Indicates whether or not a part is considered a "connector" piece.
+     *
+     * In generation, this will indicate that there is not a challenging obby piece and the generator should make sure that it has at least one "challenging" piece before considering a new stage.
+     */
+    ConnectorPiece: boolean;
+    /**
+     * Is this piece considered the seperator between two stages?
+     */
+    StageSeperator: boolean;
 }
+type ObbyPartConfigGeneric = ObbyPartConfig & { [key: string]: unknown };
+
+type ObbyPartConfigNames = Exclude<keyof ObbyPartConfig, number | Symbol>;
 
 export interface ObbyPartInfo {
     readonly PartName: string;
-    readonly Configuration: ObbyPartConfig;
+    readonly Configuration: ObbyPartConfigGeneric;
 }
 
-function parseConfigurationFolder(configFolder: Configuration): ObbyPartConfig {
-    const config: { [key: string]: unknown } | ObbyPartConfig = {
-        Beginning: false,
-        CountAsNewStage: true,
-    };
+const defaultSettings: ObbyPartConfig = {
+    Beginning: false,
+    ConnectorPiece: false,
+    Difficulty: math.huge,
+    StageSeperator: false,
+};
+
+function parseConfigurationFolder(configFolder: Configuration): ObbyPartConfigGeneric {
+    const config: ObbyPartConfigGeneric = copyInterface((defaultSettings as unknown) as ObbyPartConfigGeneric);
+
     for (const valObject of configFolder.GetChildren()) {
         if (valObject.IsA("ValueBase")) {
-            switch (valObject.Name) {
+            switch (valObject.Name as ObbyPartConfigNames) {
                 case "Difficulty":
                     assert(valObject.IsA("IntValue"), "Difficulty must be an integer value.");
-                    config.Difficulty = valObject.Value;
                     break;
                 case "Beginning":
-                    assert(valObject.IsA("BoolValue"), "Beginning must be an bool value.");
-                    config.Beginning = valObject.Value;
-                    break;
-                case "CountAsNewStage":
-                    assert(valObject.IsA("BoolValue"), "CountAsNewStage must be an bool value.");
-                    config.CountAsNewStage = valObject.Value;
-                    break;
-                default:
-                    config[valObject.Name] = valObject.Value;
+                case "ConnectorPiece":
+                case "StageSeperator":
+                    assert(valObject.IsA("BoolValue"), `${valObject.Name} must be an bool value.`);
                     break;
             }
+            config[valObject.Name] = valObject.Value;
         }
     }
 
-    return config as ObbyPartConfig;
+    return config as ObbyPartConfigGeneric;
 }
 
 const DEBUG_PART_LOADER = true;
@@ -56,9 +74,9 @@ export class ObbyPart implements ObbyPartInfo {
     public readonly StartPart: BasePart;
     public readonly EndPart: BasePart;
 
-    public readonly Configuration: ObbyPartConfig;
+    public readonly Configuration: ObbyPartConfigGeneric;
 
-    public readonly OnPlayerPassesStart: Cue<(ply: Player) => void> = new Cue<(ply: Player) => void>();
+    public readonly OnPlayerPassesStageChange: Cue<(ply: Player) => void> = new Cue<(ply: Player) => void>();
 
     public StageNumber: number;
 
@@ -73,11 +91,7 @@ export class ObbyPart implements ObbyPartInfo {
         model.Name = this.GUID;
 
         const configObject = model.FindFirstChildOfClass("Configuration");
-        let config: ObbyPartConfig = {
-            Difficulty: 0,
-            Beginning: false,
-            CountAsNewStage: true,
-        };
+        let config: ObbyPartConfigGeneric = copyInterface((defaultSettings as unknown) as ObbyPartConfigGeneric);
 
         if (configObject !== undefined) {
             config = parseConfigurationFolder(configObject);
@@ -105,26 +119,10 @@ export class ObbyPart implements ObbyPartInfo {
             }
             this.EndPart.Transparency = 1;
         }
-
-        this.StartPart.Touched.Connect((otherPart) => {
-            if (otherPart.Parent === undefined) return;
-
-            const ply = Players.GetPlayerFromCharacter(otherPart.Parent);
-            if (ply !== undefined && !this.passedPartMap.has(ply)) {
-                this.OnPlayerPassesStart.go(ply);
-                this.passedPartMap.set(ply, true);
-            }
-        });
-
-        this.modifyObbyPartInstances(model.GetChildren().filter((inst) => inst.IsA("BasePart")) as BasePart[]);
     }
 
-    protected modifyObbyPartInstances(parts: BasePart[]) {
-        if (!this.Configuration.Beginning) {
-            parts.forEach((part) => {
-                part.BrickColor = BrickColor.random();
-            });
-        }
+    public toString(): string {
+        return `ObbyPart[GUID=${this.GUID}, PartName=${this.PartName}]`;
     }
 
     public AttachTo(other: ObbyPart | undefined) {
@@ -143,15 +141,41 @@ const ObbyParts = ServerStorage.WaitForChild("ObbyParts");
 
 const obbyInfoCache: Map<string, ObbyPartInfo> = new Map<string, ObbyPartInfo>();
 
+const createdObbyParts: Map<string, ObbyPart> = new Map<string, ObbyPart>();
+
 export function createObbyPart(name: string): ObbyPart | undefined {
     const obbyPartModel = ObbyParts.FindFirstChild(name);
     if (obbyPartModel === undefined) return undefined;
 
     const modelClone = InstanceAs(obbyPartModel.Clone(), "Model");
+
+    const part = new ObbyPart(modelClone);
+    createdObbyParts.set(part.GUID, part);
+
     modelClone.Parent = Workspace;
 
-    return new ObbyPart(modelClone);
+    return part;
 }
+
+export function getObbyPartByGUID(guid: string): ObbyPart | undefined {
+    return createdObbyParts.get(guid);
+}
+
+function getcurrentobbypart_global(): ObbyPart | undefined {
+    let cur = getfenv(0).script.Parent;
+    while (cur !== undefined) {
+        // Might be a valid GUID, check it.
+        const part = getObbyPartByGUID(cur.Name);
+        if (part !== undefined) {
+            return part;
+        }
+
+        cur = cur.Parent;
+    }
+    return undefined;
+}
+
+(_G as { GetCurrentObbyPart: () => ObbyPart | undefined }).GetCurrentObbyPart = getcurrentobbypart_global;
 
 export function getObbyInfo(name: string): ObbyPartInfo | undefined {
     if (obbyInfoCache.has(name)) return obbyInfoCache.get(name);
@@ -160,11 +184,7 @@ export function getObbyInfo(name: string): ObbyPartInfo | undefined {
     if (obbyPartModel === undefined) return undefined;
 
     const configObject = obbyPartModel.FindFirstChildOfClass("Configuration");
-    let config: ObbyPartConfig = {
-        Difficulty: 0,
-        Beginning: false,
-        CountAsNewStage: true,
-    };
+    let config: ObbyPartConfigGeneric = copyInterface((defaultSettings as unknown) as ObbyPartConfigGeneric);
 
     if (configObject !== undefined) {
         config = parseConfigurationFolder(configObject);
@@ -188,6 +208,17 @@ export function getLoadableObbyPartNames(): string[] {
 }
 
 const obbyPartNames = getLoadableObbyPartNames();
+
+export function getAllLoadableObbyPartInfos(): ObbyPartInfo[] {
+    const loadables: ObbyPartInfo[] = [];
+    for (const obbyPartModel of ObbyParts.GetChildren()) {
+        const info = getObbyInfo(obbyPartModel.Name);
+        if (info !== undefined && !info.Configuration.Beginning) {
+            loadables.push(info);
+        }
+    }
+    return loadables;
+}
 
 export function createRandomObbyPart(): ObbyPart | undefined {
     const name = obbyPartNames[math.random(0, obbyPartNames.size() - 1)];
