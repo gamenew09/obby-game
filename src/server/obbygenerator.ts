@@ -169,7 +169,11 @@ export async function generateObby(startPart?: ObbyPart): Promise<ObbyDifficulty
                 assert(obbyPart);
             }
 
+            obbyPart.StageNumber = data.CurStageNumber;
             obbyPart.AttachTo(previousPart);
+
+            obbyPart.EnableScripts();
+
             parts.push(obbyPart);
 
             previousPart = obbyPart;

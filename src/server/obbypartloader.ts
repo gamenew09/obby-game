@@ -85,6 +85,7 @@ export class ObbyPart implements ObbyPartInfo {
     public constructor(model: Model) {
         this.PartName = model.Name;
         this.Model = model;
+        this.DisableScripts();
         this.StageNumber = 0;
 
         this.GUID = HttpService.GenerateGUID(false);
@@ -119,6 +120,24 @@ export class ObbyPart implements ObbyPartInfo {
             }
             this.EndPart.Transparency = 1;
         }
+    }
+
+    /**
+     * Disables all scripts found within the obby part's model.
+     */
+    public DisableScripts(): void {
+        (this.Model.GetDescendants().filter((child) => child.IsA("BaseScript")) as BaseScript[]).forEach((script) => {
+            script.Disabled = true;
+        });
+    }
+
+    /**
+     * Enables all scripts found within the obby part's model.
+     */
+    public EnableScripts(): void {
+        (this.Model.GetDescendants().filter((child) => child.IsA("BaseScript")) as BaseScript[]).forEach((script) => {
+            script.Disabled = false;
+        });
     }
 
     public toString(): string {
