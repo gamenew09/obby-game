@@ -6,7 +6,8 @@ interface LeaderstatStat {
     Object: ValueBase;
 }
 
-export class Leaderstats {
+type LeaderstatsKey<T> = Exclude<keyof T, number | Symbol>;
+export class Leaderstats<T> {
     private leaderstats: ObjectValue;
 
     private stats: Map<string, LeaderstatStat> = new Map<string, LeaderstatStat>();
@@ -19,7 +20,7 @@ export class Leaderstats {
         print(this.leaderstats);
     }
 
-    public addStat(name: string, statType: LeaderstatType, defaultValue?: string | number): Leaderstats {
+    public addStat(name: LeaderstatsKey<T>, statType: LeaderstatType, defaultValue?: string | number): Leaderstats<T> {
         let obj: ValueBase;
         switch (statType) {
             case "number":
@@ -51,21 +52,21 @@ export class Leaderstats {
         return this;
     }
 
-    public deleteStat(name: string) {
+    public deleteStat(name: LeaderstatsKey<T>) {
         if (this.stats.has(name)) {
             this.stats.get(name)!.Object.Destroy();
         }
         this.stats.delete(name);
     }
 
-    public setStatValue(name: string, val: string | number) {
+    public setStatValue<N extends LeaderstatsKey<T>>(name: N, val: T[N]) {
         const stat = this.stats.get(name);
         if (stat !== undefined) {
             stat.Object.Value = val;
         }
     }
 
-    public getStatNumberValue(name: string): number | undefined {
+    public getStatNumberValue(name: LeaderstatsKey<T>): number | undefined {
         const stat = this.stats.get(name);
         if (stat !== undefined && stat.Type === "number") {
             return stat.Object.Value as number;
@@ -74,7 +75,7 @@ export class Leaderstats {
         }
     }
 
-    public getStatStringValue(name: string): string | undefined {
+    public getStatStringValue(name: LeaderstatsKey<T>): string | undefined {
         const stat = this.stats.get(name);
         if (stat !== undefined && stat.Type === "string") {
             return stat.Object.Value as string;
@@ -82,13 +83,32 @@ export class Leaderstats {
             return undefined;
         }
     }
+
+    public getStatValue<N extends LeaderstatsKey<T>>(name: N): T[N] | undefined {
+        const stat = this.stats.get(name);
+        if (stat !== undefined) {
+            return stat.Object.Value as T[N];
+        } else {
+            return undefined;
+        }
+    }
+
+    public addStatValue<N extends LeaderstatsKey<T>, D extends T[N] extends number ? T[N] : never>(name: N, delta: D) {
+        this.setStatValue(name, ((((this.getStatValue(name) as unknown) as number) + delta) as unknown) as T[N]);
+    }
 }
 
-const leaderstatsCache: Map<Player, Leaderstats> = new Map<Player, Leaderstats>();
-export function getLeaderstatsForPlayer(ply: Player): Leaderstats {
+interface ObbyLeaderstatsInterface {
+    Stage: number;
+}
+
+type MainLeaderstats = Leaderstats<ObbyLeaderstatsInterface>;
+
+const leaderstatsCache: Map<Player, MainLeaderstats> = new Map<Player, MainLeaderstats>();
+export function getLeaderstatsForPlayer(ply: Player): MainLeaderstats {
     if (leaderstatsCache.has(ply)) return leaderstatsCache.get(ply)!;
 
-    const leaderstats = new Leaderstats(ply);
+    const leaderstats = new Leaderstats<ObbyLeaderstatsInterface>(ply);
 
     leaderstatsCache.set(ply, leaderstats);
     return leaderstats;
