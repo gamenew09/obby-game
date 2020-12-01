@@ -20,9 +20,6 @@ jobs:
         version: "^1.0.0"
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Report tool versions
-      run: rojo --version
-
     - name: Deploy
       run: rojo upload --cookie "$ROBLOSECURITY" --asset_id 2179224922
       env:
