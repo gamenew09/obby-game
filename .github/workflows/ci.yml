@@ -32,6 +32,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Deploy
-      run: rojo upload --cookie "$ROBLOSECURITY" --asset_id 6026623952
+      run: rojo upload --cookie "$ROBLOSECURITY" --asset_id $PLACE_ID
       env:
         ROBLOSECURITY: ${{ secrets.DEPLOYER_ROBLOSECURITY }}
+        PLACE_DEPLOYMENT_ID: ${{ secrets.PLACE_ID }}
