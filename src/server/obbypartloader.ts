@@ -63,7 +63,7 @@ function parseConfigurationFolder(configFolder: Configuration): ObbyPartConfigGe
     return config as ObbyPartConfigGeneric;
 }
 
-const DEBUG_PART_LOADER = true;
+const DEBUG_PART_LOADER = false;
 
 export class ObbyPart implements ObbyPartInfo {
     public readonly GUID: string;
