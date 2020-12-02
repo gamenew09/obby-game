@@ -15,6 +15,17 @@ jobs:
       with:
         submodules: true
 
+    - name: Setup node.js
+      uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Compile Typescript into Roblox Lua
+      run: rbxtsc
+
     - uses: Roblox/setup-foreman@v1
       with:
         version: "^1.0.0"
