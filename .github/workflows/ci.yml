@@ -35,4 +35,4 @@ jobs:
       run: rojo upload --cookie "$ROBLOSECURITY" --asset_id $PLACE_ID
       env:
         ROBLOSECURITY: ${{ secrets.DEPLOYER_ROBLOSECURITY }}
-        PLACE_DEPLOYMENT_ID: ${{ secrets.PLACE_ID }}
+        PLACE_ID: ${{ secrets.PLACE_ID }}
