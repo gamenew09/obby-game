@@ -11,6 +11,7 @@ const placeId = game.PlaceId;
 
 const datas: Map<number, PlaceDependentData> = new Map<number, PlaceDependentData>();
 
+// https://www.roblox.com/games/6026623952/Obby-Game
 datas.set(6026623952, {
     BadgeLookup: {},
     AssetLookup: {},
