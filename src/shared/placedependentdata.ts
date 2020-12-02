@@ -12,9 +12,7 @@ const placeId = game.PlaceId;
 const datas: Map<number, PlaceDependentData> = new Map<number, PlaceDependentData>();
 
 datas.set(6026623952, {
-    BadgeLookup: {
-        test: 0,
-    },
+    BadgeLookup: {},
     AssetLookup: {},
 });
 
