@@ -93,6 +93,12 @@ export class Leaderstats<T> {
     public addStatValue<N extends LeaderstatsKey<T>, D extends T[N] extends number ? T[N] : never>(name: N, delta: D) {
         this.setStatValue(name, ((((this.getStatValue(name) as unknown) as number) + delta) as unknown) as T[N]);
     }
+
+    public isValidValueForStat(stat: LeaderstatsKey<T>, val: unknown): val is T[typeof stat] {
+        const statData = this.stats.get(stat)!;
+        assert(statData, `this.stats.get("${stat}") failed.`);
+        return typeIs(val, statData.Type);
+    }
 }
 
 interface ObbyLeaderstatsInterface {
