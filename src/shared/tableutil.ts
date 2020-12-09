@@ -12,3 +12,12 @@ export function copyInterface<I>(i: I): I {
 
     return (newInterface as unknown) as I;
 }
+
+export function arrayHas(arr: Array<unknown>, val: unknown): boolean {
+    for (const v of arr) {
+        if (v === val) {
+            return true;
+        }
+    }
+    return false;
+}
