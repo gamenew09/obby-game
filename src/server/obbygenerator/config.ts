@@ -74,8 +74,6 @@ const obbyGeneratorConfig: ObbyGeneratorSettings<{ [difficultyName: string]: Obb
             IncludeDifficulties: ["BasicJumps"],
         },
     },
-
-    GenerateDifficulties: ["JumpsAndLava"],
 };
 
 export default (obbyGeneratorConfig as unknown) as ObbyGeneratorSettings<Map<string, ObbyGeneratorDifficultySettings>>;
