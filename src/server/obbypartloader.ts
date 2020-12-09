@@ -9,7 +9,7 @@ export interface ObbyPartConfig {
     /**
      * Indicates the difficulty of a obby part, which is used when generating an obby stage.
      */
-    Difficulty: number;
+    Difficulty: string;
     /**
      * Indicates that the obby piece is the beginning platform that a player is on.
      */
@@ -37,7 +37,7 @@ export interface ObbyPartInfo {
 const defaultSettings: ObbyPartConfig = {
     Beginning: false,
     ConnectorPiece: false,
-    Difficulty: math.huge,
+    Difficulty: "",
     StageSeperator: false,
 };
 
@@ -48,7 +48,10 @@ function parseConfigurationFolder(configFolder: Configuration): ObbyPartConfigGe
         if (valObject.IsA("ValueBase")) {
             switch (valObject.Name as ObbyPartConfigNames) {
                 case "Difficulty":
-                    assert(valObject.IsA("IntValue"), "Difficulty must be an integer value.");
+                    assert(
+                        valObject.IsA("StringValue"),
+                        `${valObject.Name} must be a string value. It is ${valObject.ClassName}`,
+                    );
                     break;
                 case "Beginning":
                 case "ConnectorPiece":
@@ -137,6 +140,28 @@ export class ObbyPart implements ObbyPartInfo {
     public EnableScripts(): void {
         (this.Model.GetDescendants().filter((child) => child.IsA("BaseScript")) as BaseScript[]).forEach((script) => {
             script.Disabled = false;
+        });
+    }
+
+    protected IsDeathPart(part: BasePart): boolean {
+        return part.Name.lower().sub(0, 4) === "kill";
+    }
+
+    public RunScripts(): void {
+        this.EnableScripts();
+
+        (this.Model.GetDescendants().filter(
+            (child) => child.IsA("BasePart") && this.IsDeathPart(child),
+        ) as BasePart[]).forEach((part) => {
+            part.Touched.Connect((otherPart) => {
+                const character = otherPart.Parent;
+                if (character !== undefined) {
+                    const humanoid = character.FindFirstChildOfClass("Humanoid");
+                    if (humanoid !== undefined) {
+                        humanoid.TakeDamage(1000);
+                    }
+                }
+            });
         });
     }
 

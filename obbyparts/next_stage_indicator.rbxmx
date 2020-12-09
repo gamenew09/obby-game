@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="Model" referent="RBX5EF467CFA4AF4F54B816A28207AD1BA1">
+	<Item class="Model" referent="RBX122398EA6CF2469C878ADD7CD2BBA79E">
 		<Properties>
 			<BinaryString name="AttributesSerialize"></BinaryString>
 			<token name="LevelOfDetail">0</token>
@@ -45,7 +45,7 @@
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Part" referent="RBX31FABCDD680540BF9686AE6E154A4D03">
+		<Item class="Part" referent="RBXDFEC04F77CA64653BDC5509ABC94732C">
 			<Properties>
 				<bool name="Anchored">true</bool>
 				<BinaryString name="AttributesSerialize"></BinaryString>
@@ -122,7 +122,7 @@
 				</Vector3>
 			</Properties>
 		</Item>
-		<Item class="Part" referent="RBX50861B44A47C4A8B9C69630E8241399A">
+		<Item class="Part" referent="RBX224510EFD31A4087A1A68A673BF9E622">
 			<Properties>
 				<bool name="Anchored">true</bool>
 				<BinaryString name="AttributesSerialize"></BinaryString>
@@ -198,7 +198,7 @@
 					<Z>9</Z>
 				</Vector3>
 			</Properties>
-			<Item class="Weld" referent="RBX263C0DAF01A24A21AE40A7E1236B6396">
+			<Item class="Weld" referent="RBX8EEE89F4AAB3479BADA95983C686B714">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<CoordinateFrame name="C0">
@@ -231,14 +231,14 @@
 					</CoordinateFrame>
 					<bool name="Enabled">true</bool>
 					<string name="Name">Weld</string>
-					<Ref name="Part0">RBX50861B44A47C4A8B9C69630E8241399A</Ref>
-					<Ref name="Part1">RBX31FABCDD680540BF9686AE6E154A4D03</Ref>
+					<Ref name="Part0">RBX224510EFD31A4087A1A68A673BF9E622</Ref>
+					<Ref name="Part1">RBXDFEC04F77CA64653BDC5509ABC94732C</Ref>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Part" referent="RBX3E2D0BE6AA104E46ABDBF66021699C8C">
+		<Item class="Part" referent="RBXB1A024B404264948A7F6C555AD40E009">
 			<Properties>
 				<bool name="Anchored">true</bool>
 				<BinaryString name="AttributesSerialize"></BinaryString>
@@ -315,23 +315,14 @@
 				</Vector3>
 			</Properties>
 		</Item>
-		<Item class="Configuration" referent="RBX0F15ADB1759645C8B14BF9BC8CAD679D">
+		<Item class="Configuration" referent="RBX758438C09E0A4C52A3473C442115AF6C">
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<string name="Name">Configuration</string>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="IntValue" referent="RBXB9D5E61DDD474CAF835D3B1E7D21C205">
-				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<string name="Name">Difficulty</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-					<int64 name="Value">0</int64>
-				</Properties>
-			</Item>
-			<Item class="BoolValue" referent="RBXBDDED127D93C407DA6B665874BD43FCF">
+			<Item class="BoolValue" referent="RBX86B530588CE74F4F9566005B35676242">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<string name="Name">StageSeperator</string>
@@ -340,8 +331,17 @@
 					<bool name="Value">true</bool>
 				</Properties>
 			</Item>
+			<Item class="StringValue" referent="RBX9C7F3194911946D4A73E0740322DDB0F">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<string name="Name">Difficulty</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+					<string name="Value">BasicJumps</string>
+				</Properties>
+			</Item>
 		</Item>
-		<Item class="Part" referent="RBX06DDF8E98C4C494693BA7E2CA3EF95B8">
+		<Item class="Part" referent="RBXCB5E4CAC68C54118A66CC206AF402646">
 			<Properties>
 				<bool name="Anchored">true</bool>
 				<BinaryString name="AttributesSerialize"></BinaryString>
@@ -417,7 +417,7 @@
 					<Z>10</Z>
 				</Vector3>
 			</Properties>
-			<Item class="Weld" referent="RBXBDB3DD6F163241D8AB6525AA4BE05B0E">
+			<Item class="Weld" referent="RBX7B80B2A2BAEE4FECBAB2AF98D8B71E71">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<CoordinateFrame name="C0">
@@ -450,13 +450,13 @@
 					</CoordinateFrame>
 					<bool name="Enabled">true</bool>
 					<string name="Name">Weld</string>
-					<Ref name="Part0">RBX06DDF8E98C4C494693BA7E2CA3EF95B8</Ref>
-					<Ref name="Part1">RBX72DF33FEAA264ABA80DF199B88F10490</Ref>
+					<Ref name="Part0">RBXCB5E4CAC68C54118A66CC206AF402646</Ref>
+					<Ref name="Part1">RBX55C7691400DA41D69DF8CDEBACA036B8</Ref>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Script" referent="RBXA94CCEBD40B745AD9B085D1B09E2A073">
+			<Item class="Script" referent="RBXC5C56039CB51464D9B32FB596743FA85">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<bool name="Disabled">false</bool>
@@ -486,7 +486,7 @@ end)]]></ProtectedString>
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Part" referent="RBX72DF33FEAA264ABA80DF199B88F10490">
+		<Item class="Part" referent="RBX55C7691400DA41D69DF8CDEBACA036B8">
 			<Properties>
 				<bool name="Anchored">true</bool>
 				<BinaryString name="AttributesSerialize"></BinaryString>
@@ -562,7 +562,7 @@ end)]]></ProtectedString>
 					<Z>8</Z>
 				</Vector3>
 			</Properties>
-			<Item class="Weld" referent="RBXD4BE1E79700C4FE5A3FC56BAF58BF5F8">
+			<Item class="Weld" referent="RBXA43AEB5721084067B91DFE2C2A2C4C42">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<CoordinateFrame name="C0">
@@ -595,13 +595,13 @@ end)]]></ProtectedString>
 					</CoordinateFrame>
 					<bool name="Enabled">true</bool>
 					<string name="Name">Weld</string>
-					<Ref name="Part0">RBX72DF33FEAA264ABA80DF199B88F10490</Ref>
-					<Ref name="Part1">RBX31FABCDD680540BF9686AE6E154A4D03</Ref>
+					<Ref name="Part0">RBX55C7691400DA41D69DF8CDEBACA036B8</Ref>
+					<Ref name="Part1">RBXDFEC04F77CA64653BDC5509ABC94732C</Ref>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="SurfaceGui" referent="RBXBA3E59442B8F45B18377DE29D950C2A4">
+			<Item class="SurfaceGui" referent="RBX1C77BA35E4A949CF92B6316247D15F00">
 				<Properties>
 					<bool name="Active">true</bool>
 					<Ref name="Adornee">null</Ref>
@@ -627,7 +627,7 @@ end)]]></ProtectedString>
 					<token name="ZIndexBehavior">1</token>
 					<float name="ZOffset">0</float>
 				</Properties>
-				<Item class="TextLabel" referent="RBX02578F60F5024AE7A5265048F13B4871">
+				<Item class="TextLabel" referent="RBXF1BE8622FAD9462E93924BD8A4C5DBAE">
 					<Properties>
 						<bool name="Active">false</bool>
 						<Vector2 name="AnchorPoint">
@@ -702,7 +702,7 @@ end)]]></ProtectedString>
 						<bool name="Visible">true</bool>
 						<int name="ZIndex">1</int>
 					</Properties>
-					<Item class="Script" referent="RBX82437F8B71904B17B0827CC11B675293">
+					<Item class="Script" referent="RBXBAAC9E73A02E4389850104633780F043">
 						<Properties>
 							<BinaryString name="AttributesSerialize"></BinaryString>
 							<bool name="Disabled">false</bool>
