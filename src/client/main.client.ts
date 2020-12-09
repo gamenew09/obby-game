@@ -1,3 +1,5 @@
-import { makeHello } from "shared/module";
+import Roact from "@rbxts/roact";
+import { Players } from "@rbxts/services";
+import UI from "./ui";
 
-print(makeHello("main.client.ts"));
+const uiMountHandle = Roact.mount(UI, Players.LocalPlayer!.FindFirstChildOfClass("PlayerGui"));
